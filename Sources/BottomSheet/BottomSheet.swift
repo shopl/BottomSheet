@@ -123,12 +123,6 @@ struct SheetPlus<HContent: View, MContent: View, Background: View>: ViewModifier
                         onDrag(value)
                     }
                     .offset(y: UIScreen.main.bounds.height - translation)
-                    .onDisappear {
-                        translation = 0
-                        detents = []
-                        
-                        onDismiss()
-                    }
                     .animation(
                         .interpolatingSpring(
                             mass: animationCurve.mass,
@@ -144,7 +138,11 @@ struct SheetPlus<HContent: View, MContent: View, Background: View>: ViewModifier
         .onPreferenceChange(SheetPlusKey.self) { value in
             /// Quick hack to prevent the scrollview from resetting the height when keyboard shows up.
             /// Replace if the root cause has been located.
-            if value.detents.count == 0 { return }
+            if value.detents.count == 0 || value.selectedDetent == .hidden {
+                isPresented = false
+                onDismiss()
+                return
+            }
                                                 
             sheetConfig = value
             translation = value.translation
