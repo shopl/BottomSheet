@@ -123,12 +123,6 @@ struct SheetPlus<HContent: View, MContent: View, Background: View>: ViewModifier
                         onDrag(value)
                     }
                     .offset(y: UIScreen.main.bounds.height - translation)
-                    .onDisappear {
-                        translation = 0
-                        detents = []
-                        
-                        onDismiss()
-                    }
                     .animation(
                         .interpolatingSpring(
                             mass: animationCurve.mass,
@@ -146,6 +140,7 @@ struct SheetPlus<HContent: View, MContent: View, Background: View>: ViewModifier
             /// Replace if the root cause has been located.
             if value.detents.count == 0 || value.selectedDetent == .hidden {
                 isPresented = false
+                onDismiss()
                 return
             }
                                                 
