@@ -18,7 +18,7 @@ struct DragIndicator: View {
             .foregroundColor(Color(UIColor.systemGray3))
             .padding(.vertical, 8)
             .onTapGesture {
-                let sortedDetents = detents.sorted { $0.size < $1.size }
+                let sortedDetents = detents.sorted { $0.size < $1.size }.filter { $0 != .hidden }
                 let nextDetent = sortedDetents.first(where: { $0.size > translation })
 
                 if let nextDetent = nextDetent {
